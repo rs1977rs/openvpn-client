@@ -1,0 +1,37 @@
+---
+# tasks file for openvpn-client
+
+- name: install openvpn
+  yum:
+    name: openvpn
+    state: latest
+
+- name: Creates directory for logs
+  file:
+    path: /var/log/openvpn
+    state: directory
+
+- name: Creates directory for openvpn configuration
+  file:
+    path: /etc/openvpn/{{ openvpn_client_name }}
+    state: directory
+
+- name: Copy client configuration
+  synchronize:
+    src: roles/openvpn-client/files/{{ inventory_hostname }}/
+    dest: /etc/openvpn/{{ openvpn_client_name }}
+    delete: no
+  notify:
+    - restart openvpn
+
+- name: copy config-file
+  template:
+    src: roles/openvpn-client/templates/vpn-client.conf.j2
+    dest: /etc/openvpn/{{ openvpn_client_name }}.conf
+  notify:
+    - restart openvpn
+
+- name: enable service
+  service:
+    name: openvpn@{{ openvpn_client_name }}
+    enabled: yes

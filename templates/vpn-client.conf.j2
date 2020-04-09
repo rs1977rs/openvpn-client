@@ -1,0 +1,18 @@
+client
+dev tap11
+proto tcp
+remote {{ openvpn_server_address }} {{ openvpn_server_port }}
+resolv-retry infinite
+nobind
+user root
+group root
+persist-key
+persist-tun
+
+comp-lzo no
+push "comp-lzo no"
+
+ca /etc/openvpn/{{ openvpn_client_name }}/ca.crt
+cert /etc/openvpn/{{ openvpn_client_name }}/{{ inventory_hostname }}.crt
+key /etc/openvpn/{{ openvpn_client_name }}/{{ inventory_hostname }}.key
+log /var/log/openvpn/openvpn.log
