@@ -1,4 +1,4 @@
-Role Name
+OpenVPN client
 =========
 
 Requirements
